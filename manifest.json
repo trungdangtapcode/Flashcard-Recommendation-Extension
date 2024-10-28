@@ -3,6 +3,9 @@
     "name": "First Extension",
     "description": "Base Level Extension",
     "version": "1.0",
+    "action": {
+      "default_icon": "Japan.png"
+    },
     "content_scripts": [
     {
       "js": ["popup/popup.js"],

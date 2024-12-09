@@ -6,6 +6,9 @@
     "action": {
       "default_icon": "Japan.png"
     },
+    "permissions": [
+      "contextMenus"
+    ],
     "content_scripts": [
     {
       "js": ["popup/popup.js"],
@@ -15,5 +18,8 @@
         "file:///D:/git/workplace/japanese_learning_system/test/article.html"
       ]
     }
-  ]
+    ],
+    "background": {
+      "service_worker": "translate_work.js"
+    }
 }

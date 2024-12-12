@@ -12,7 +12,20 @@ export class AuthService {
     ) {}
     
     createUser(createUserDto: CreateUserDto) {
-        const user = new this.userModel(createUserDto);
-        return user.save();
+        try {
+            const user = new this.userModel(createUserDto);
+            user.save();
+            return user;
+        } catch (error) {
+            if (error.code === 11000) {
+                throw new Error("Email already exists");
+            }
+            throw new Error("An error occurred");
+            return "error";
+        }
+    }
+
+    getUser(){
+        return this.userModel.find();
     }
 }

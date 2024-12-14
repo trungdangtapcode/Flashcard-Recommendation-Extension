@@ -1,6 +1,10 @@
-import {Body, Controller, Get, Post, UsePipes, ValidationPipe} from '@nestjs/common';
+import {Body, Controller, Get, Post, Req, UseFilters, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/CreateUser.dto';
+import { MongoExceptionFilter } from '@/validation-error.filter';
+import { LocalGuard } from './guards/local.guard';
+import { JwtGuard } from './guards/jwt.guard';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -9,12 +13,22 @@ export class AuthController {
 
     @Post("/createUser")
     @UsePipes(new ValidationPipe())
+    @UseFilters(new MongoExceptionFilter())
     createUser(@Body() CreateUserDto: CreateUserDto){
         return this.AuthService.createUser(CreateUserDto);
     }
 
-    @Get()
-    getUser(){
-        return this.AuthService.getUser();
+    @Post("/login")
+    @UseGuards(LocalGuard)
+    @UseFilters(new MongoExceptionFilter())
+    verifyUser(@Req() req: Request){
+        return req.user;
+    }
+
+    @Get('status')
+    @UseGuards(JwtGuard)
+    getUser(@Req() req: Request){
+
+        return req.user;
     }
 }

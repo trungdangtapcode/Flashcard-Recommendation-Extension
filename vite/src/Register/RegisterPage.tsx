@@ -1,5 +1,8 @@
+import React from 'react'
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
+    const navigate = useNavigate();
     const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
@@ -15,9 +18,11 @@ const RegisterPage = () => {
             });
             
             const data = await response.json();
-        
+            
+            console.log(response)
             if (response.ok) {
-                alert(data.message); // "User registered successfully"
+                alert("User created successfully");
+                navigate("/login");
             } else {
                 alert(data.message); // "User already exists"
             }
@@ -41,7 +46,7 @@ const RegisterPage = () => {
             <input
               type="text"
               id="name"
-              value="John Doe"
+              defaultValue="John Doe"
               placeholder="Enter your name"
               className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               required
@@ -57,7 +62,7 @@ const RegisterPage = () => {
             <input
               type="email"
               id="email"
-              value="tcuong1000@gmail.com"
+              defaultValue="tcuong1000@gmail.com"
               placeholder="Enter your email"
               className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               required
@@ -73,7 +78,7 @@ const RegisterPage = () => {
             <input
               type="password"
               id="password"
-              value="123456"
+              defaultValue="123456"
               placeholder="Create a password"
               className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               required
@@ -89,7 +94,7 @@ const RegisterPage = () => {
         <p className="mt-6 text-center text-sm text-gray-600">
           Already have an account?{" "}
           <a
-            href="/"
+            href="/login"
             className="text-blue-500 hover:underline"
           >
             Login

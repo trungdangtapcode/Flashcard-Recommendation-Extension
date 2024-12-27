@@ -1,17 +1,38 @@
 
-import { useState } from 'react'
+// import { useState } from 'react'
 import '@/style.css'
-import { Link} from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 function LoginPage() {
-  const [count, setCount] = useState(0)
+//   const [count, setCount] = useState(0)
+// 
+// const increment = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>|React.FormEvent<HTMLFormElement>): void => {
+//     e.preventDefault();
+//     console.log(count, import.meta.env.VITE_SOME_KEY);
+//     setCount((count: number) => count + 1);
+// }
 
-const increment = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>|React.FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    console.log(count, import.meta.env.VITE_SOME_KEY);
-    setCount((count: number) => count + 1);
-}
+const navigate = useNavigate();
+const [token, setToken] = useState<string|null>(localStorage.getItem("token"));
+
+const updateToken = () => {
+    const newToken = localStorage.getItem("token");
+    setToken(newToken);
+};
+useEffect(() => {
+    window.addEventListener('storage',updateToken);
+    return () => {
+        window.removeEventListener('storage', updateToken);
+    };
+}, [])
+
+useEffect(() => {
+    if (token) {
+      navigate("/card");
+    }
+  }, [token, navigate]); 
 
 const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,6 +53,7 @@ const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         if (response.ok) {
             toast.success(data.token)
             localStorage.setItem('token', data.token);
+            updateToken()
         } else {
             toast.error('Wrong email or password');
         }
@@ -59,7 +81,7 @@ return (
               id="email"
               defaultValue="a@gmail.com"
               placeholder="Enter your email"
-              className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-700"
               required
             />
           </div>
@@ -75,7 +97,7 @@ return (
               id="password"
               defaultValue="a@gmail.com"
               placeholder="Enter your password"
-              className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-700"
               required
             />
           </div>

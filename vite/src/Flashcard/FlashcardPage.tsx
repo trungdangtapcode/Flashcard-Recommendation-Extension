@@ -1,0 +1,127 @@
+import React, { useState, useEffect, useRef } from "react";
+import FlashcardList from "./FlashcardList.tsx";
+import "./App.css";
+import axios from "axios";
+
+import { useNavigate } from "react-router-dom";
+
+const FlashcardPage = () => {
+  const [flashcards, setFlashcards] = useState([]);
+  const [categories, setCategories] = useState<ICategories[]>([]);
+
+  const categoryEl = useRef<HTMLSelectElement | null>(null);
+  const amountEl = useRef<HTMLInputElement | null>(null);
+
+  const navigate = useNavigate();
+  const logoutHandler = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+  const verifyToken = async () => {
+    try {
+      const url = import.meta.env.VITE_BACKEND_URL;
+      const token = localStorage.getItem("token");
+      const response = await fetch(url + "/auth/status", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log(data);
+      } else {
+        console.log(data.message);
+      }
+    } catch (err) {
+      console.log(`An error occurred ${err}`);
+    }
+  };
+
+  useEffect(() => {
+    axios.get("https://opentdb.com/api_category.php").then((res) => {
+      setCategories(res.data.trivia_categories);
+    });
+  }, []);
+
+  useEffect(() => {
+    verifyToken();
+  }, []);
+
+  function decodeString(str: string) {
+    const textArea = document.createElement("textarea");
+    textArea.innerHTML = str;
+    return textArea.value;
+  }
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    axios
+      .get("https://opentdb.com/api.php", {
+        params: {
+          amount: amountEl.current?.value,
+          category: categoryEl.current?.value,
+        },
+      })
+
+      .then((res) => {
+        setFlashcards(
+          res.data.results.map(
+            (questionItem: IFlashcardItem, index: number) => {
+              const answer = decodeString(questionItem.correct_answer);
+              const options = [
+                ...questionItem.incorrect_answers.map((a) => decodeString(a)),
+                answer,
+              ];
+              return {
+                id: `${index}-${Date.now()}`,
+                question: decodeString(questionItem.question),
+                answer: answer,
+                options: options.sort(() => Math.random() - 0.5),
+              };
+            }
+          )
+        );
+      });
+  }
+
+  return (
+    <>
+      <button onClick={logoutHandler}>LOG OUT</button>
+      <form className="header" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="category">Category</label>
+          <select id="category" ref={categoryEl}>
+            {categories.map((category) => {
+              return (
+                <option value={category.id} key={category.id}>
+                  {category.name}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="amount">Number of Questions</label>
+          <input
+            type="number"
+            id="amount"
+            min="1"
+            step="1"
+            defaultValue={10}
+            ref={amountEl}
+          />
+        </div>
+        <div className="form-group">
+          <button className="btn">Generate</button>
+        </div>
+      </form>
+      <div className="container">
+        <FlashcardList flashcards={flashcards} />
+      </div>
+    </>
+  );
+};
+
+export default FlashcardPage;

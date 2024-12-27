@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
     const navigate = useNavigate();
@@ -8,13 +8,14 @@ const RegisterPage = () => {
         
         const email = (document.getElementById("email") as HTMLInputElement)?.value;
         const password =  (document.getElementById("password") as HTMLInputElement)?.value;
-        
+        const name =  (document.getElementById("name") as HTMLInputElement)?.value;
+
         try {
             const url = import.meta.env.VITE_BACKEND_URL;
             const response = await fetch(url+"/auth/createUser", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: email, password: password }),
+                body: JSON.stringify({ email: email, password: password, name: name }),
             });
             
             const data = await response.json();
@@ -48,7 +49,7 @@ const RegisterPage = () => {
               id="name"
               defaultValue="John Doe"
               placeholder="Enter your name"
-              className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-700"
               required
             />
           </div>
@@ -64,7 +65,7 @@ const RegisterPage = () => {
               id="email"
               defaultValue="tcuong1000@gmail.com"
               placeholder="Enter your email"
-              className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-700"
               required
             />
           </div>
@@ -80,7 +81,7 @@ const RegisterPage = () => {
               id="password"
               defaultValue="123456"
               placeholder="Create a password"
-              className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-700"
               required
             />
           </div>
@@ -93,12 +94,12 @@ const RegisterPage = () => {
         </form>
         <p className="mt-6 text-center text-sm text-gray-600">
           Already have an account?{" "}
-          <a
-            href="/login"
+          <Link
+            to="/login"
             className="text-blue-500 hover:underline"
           >
             Login
-          </a>
+          </Link>
         </p>
       </div>
     </div>

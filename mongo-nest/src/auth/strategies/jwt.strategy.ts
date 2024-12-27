@@ -13,7 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy){
     }
 
     async validate(payload: any){
-        console.log('Inside JWT')
+        console.log('Inside JWT Strategy');
         console.log(payload)
         return payload;
     }

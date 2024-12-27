@@ -5,16 +5,19 @@
 // import './App.css'
 import './style.css'
 import LoginPage from './LoginPage/LoginPage'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { HashRouter as Router, Route, Routes} from 'react-router-dom'
 import RegisterPage from './Register/RegisterPage'
+import FlashcardPage from './Flashcard/FlashcardPage'
 
 
 function App() {
   return (
-    <Router>
+    <Router basename={import.meta.env.PUBLIC_URL}>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/" element={<LoginPage/>} />
+        <Route path="/card" element={<FlashcardPage/>} />
       </Routes>
     </Router>
   )

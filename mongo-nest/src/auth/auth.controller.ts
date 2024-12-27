@@ -15,6 +15,7 @@ export class AuthController {
     @UsePipes(new ValidationPipe())
     @UseFilters(new MongoExceptionFilter())
     createUser(@Body() CreateUserDto: CreateUserDto){
+        console.log(CreateUserDto)
         return this.AuthService.createUser(CreateUserDto);
     }
 
@@ -22,13 +23,14 @@ export class AuthController {
     @UseGuards(LocalGuard)
     @UseFilters(new MongoExceptionFilter())
     verifyUser(@Req() req: Request){
+        console.log('In Verify User (Controller)');
         return req.user;
     }
 
     @Get('status')
     @UseGuards(JwtGuard)
-    getUser(@Req() req: Request){
-
-        return req.user;
+    getUser(){
+        const userData = this.AuthService.getUser();
+        return userData;
     }
 }

@@ -22,6 +22,7 @@ export class AuthService {
     }
 
     async verifyUser(loginUserDto: LoginUserDto): Promise<{token: string}> {
+        console.log('In Verify User (Service)');
         const user = await this.userModel.findOne(loginUserDto);
         if(user){
             const token = this.jwtService.sign({id: user._id});
@@ -30,7 +31,7 @@ export class AuthService {
     }
 
 
-    getUser(){
+    async getUser(){
         return this.userModel.find();
     }
 }

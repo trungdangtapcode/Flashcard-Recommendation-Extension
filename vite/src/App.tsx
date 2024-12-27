@@ -8,6 +8,7 @@ import LoginPage from './LoginPage/LoginPage'
 import { HashRouter as Router, Route, Routes} from 'react-router-dom'
 import RegisterPage from './Register/RegisterPage'
 import FlashcardPage from './Flashcard/FlashcardPage'
+import ProfileEditorPage from './ProfileEditor/ProfileEditorPage'
 
 
 function App() {
@@ -16,8 +17,9 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/" element={<LoginPage/>} />
         <Route path="/card" element={<FlashcardPage/>} />
+        <Route path="/profile" element={<ProfileEditorPage />} />
+        <Route path="/" element={<LoginPage/>} />
       </Routes>
     </Router>
   )

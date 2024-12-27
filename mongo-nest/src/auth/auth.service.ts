@@ -1,9 +1,10 @@
 import { Injectable} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { User } from "./user.chema";
-import { Model } from "mongoose";
+import mongoose, { Model } from "mongoose";
 import { CreateUserDto } from "./dto/CreateUser.dto";
 import { LoginUserDto } from "./dto/LoginUser.dto";
+import { UpdateUserDto } from "./dto/UpdateUser.dto";
 import { JwtService } from "@nestjs/jwt"; // Add this line
 
 @Injectable()
@@ -31,7 +32,23 @@ export class AuthService {
     }
 
 
-    async getUser(){
-        return this.userModel.find();
+    async getUser(id: string){
+        const query: any = { _id: new mongoose.Types.ObjectId(id) }
+        const user = await this.userModel.findOne(query);
+        if (!user.hasOwnProperty('name')) user.name = 'Anonymous';
+        if (!user.hasOwnProperty('age')) user.age = 18;
+        if (!user.hasOwnProperty('occupation')) user.occupation = 'Unemployed';
+        if (!user.hasOwnProperty('hobbies')) user.hobbies = 'Nothing';
+        if (!user.hasOwnProperty('interests')) user.interests = 'Nothing';
+        if (!user.hasOwnProperty('gender')) user.gender = 'Non-gendered';
+        return user;
+    }
+
+    async updateUser(id: string, UpdateUserDto: UpdateUserDto){
+        const query: any = { _id: new mongoose.Types.ObjectId(id) }
+        const {name, bio} = UpdateUserDto;
+        const update = {name, ...bio};
+        const user = await this.userModel.findOneAndUpdate(query, update);
+        return user
     }
 }

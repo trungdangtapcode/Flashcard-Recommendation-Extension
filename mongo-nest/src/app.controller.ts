@@ -9,4 +9,9 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  @Get('questions')
+  getQuestions(): string {
+    return '[{"question":"What your fucking","answers":["huh","the hell","stfu","kk"],"correct_id":2}]';
+  }
 }

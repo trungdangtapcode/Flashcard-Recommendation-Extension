@@ -1,7 +1,7 @@
 chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
       id: "saveText",
-      title: "Save Selected Text",
+      title: "http://192.168.1.1:3010",
       contexts: ["selection"]
     });
   });

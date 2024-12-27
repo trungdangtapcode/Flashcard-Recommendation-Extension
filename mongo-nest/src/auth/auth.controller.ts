@@ -5,6 +5,13 @@ import { MongoExceptionFilter } from '@/validation-error.filter';
 import { LocalGuard } from './guards/local.guard';
 import { JwtGuard } from './guards/jwt.guard';
 import { Request } from 'express';
+import { UpdateUserDto } from './dto/UpdateUser.dto';
+
+interface IJwdPayloadUserId {
+    id: string, 
+    iat: number,
+    exp: number
+}
 
 @Controller('auth')
 export class AuthController {
@@ -29,8 +36,16 @@ export class AuthController {
 
     @Get('status')
     @UseGuards(JwtGuard)
-    getUser(){
-        const userData = this.AuthService.getUser();
+    getUser(@Req() req: Request){
+        const id = (req.user as IJwdPayloadUserId).id
+        const userData = this.AuthService.getUser(id);
         return userData;
+    }
+
+    @Post('update')
+    @UseGuards(JwtGuard)
+    getUpdate(@Req() req: Request, @Body() UpdateUserDto: UpdateUserDto){
+        const id = (req.user as IJwdPayloadUserId).id
+        return this.AuthService.updateUser(id, UpdateUserDto);
     }
 }

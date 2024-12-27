@@ -7,3 +7,15 @@ interface IFlashcardItem {
     id: number;
 }
 interface ICategories { id: number; name: string }
+
+interface IQuestionProps {
+    question: string, 
+    answers: string[], 
+    correctId: number, 
+    onNext: () => void
+}
+interface IQuestion {
+    question: string;
+    answers: string[];
+    correct_id: number;
+}

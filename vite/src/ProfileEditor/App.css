@@ -1,0 +1,11 @@
+.App {
+    text-align: center;
+  }
+  
+  img {
+    border-radius: 100%;
+  }
+  
+  .invisible {
+    display: none;
+  }

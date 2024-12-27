@@ -14,4 +14,7 @@ export default defineConfig({
   build: {
     outDir: './dist' //Added
   },
+  define: {
+    __TRANSLATE_API_URL__: JSON.stringify(process.env.VITE_BACKEND_URL || "con cac"),
+  },
 })

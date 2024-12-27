@@ -28,7 +28,7 @@ useEffect(() => {
     };
 }, [])
 
-useEffect(() => {
+useEffect(() => { 
     if (token) {
       navigate("/card");
     }

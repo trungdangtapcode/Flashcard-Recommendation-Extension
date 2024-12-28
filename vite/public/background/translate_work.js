@@ -6,15 +6,15 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-
+const backend_url = "http://127.0.0.1:3010";
 chrome.contextMenus.onClicked.addListener((info, tab) => {
 if (info.menuItemId !== "translateText" || !info.selectionText) return;
 chrome.scripting.executeScript({
-  target: { tabId: tab.id },
-  func: async (info, tab) => {
+  target: { tabId: tab.id},
+  func: async (info, tab, backend_url) => {
     async function translateText(text) {
       body = { text: text, from: "en", to: "vi" }
-      const url = "http://127.0.0.1:3010/translate";
+      const url = backend_url+"/translate";
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -100,7 +100,7 @@ chrome.scripting.executeScript({
   
       // Add the popup to the DOM
       document.body.appendChild(popup);
-
+      
       setTimeout(() => {
         if (document.body.contains(popup))
           document.body.removeChild(popup);
@@ -121,7 +121,7 @@ chrome.scripting.executeScript({
       });
     });
   },
-  args: [info, tab]
+  args: [info, tab, backend_url]
 });
 
 });
@@ -144,9 +144,22 @@ chrome.history.onVisited.addListener(()=>{
     saveLocal
   )
   const LENGHT_LIMIT = 50
-  chrome.history.search({text: '', maxResults: LENGHT_LIMIT}, function(data) {
+  chrome.history.search({text: '', maxResults: LENGHT_LIMIT}, async function(data) {
     chrome.storage.local.set({ savedEnglishHistoryUrl: data }, () => {
     })
+    url = backend_url+"/auth/historyupdate"
+    body = {"urls": data.map((item) => item.url)}
+    const response=  await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    const responseData = await response.json()
+    chrome.storage.local.get("token", (result) => {
+      console.log("Token retrieved:", result.token);
+    });
 });
 }
 )

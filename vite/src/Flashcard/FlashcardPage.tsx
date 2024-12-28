@@ -176,11 +176,13 @@ const verifyToken = async () => {
 
 useEffect(() => {
 	verifyToken();
-	// chrome.storage.local.get("savedEnglishHistoryUrl", function(data) {
-	// 	console.log(data.savedEnglishHistoryUrl);
-	// });
-	console.log(localStorage.getItem("savedEnglishHistoryUrl"));
+	if (chrome!==undefined && chrome.storage!==undefined) {
+		chrome.storage.local.get("savedEnglishHistoryUrl", (data)=>{
+			console.log(data.savedEnglishHistoryUrl)
+		});
+	}
 }, []);
+
 
 useEffect(() => {
 if (questions.length === 0) {

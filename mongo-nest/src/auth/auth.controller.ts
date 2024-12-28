@@ -6,6 +6,7 @@ import { LocalGuard } from './guards/local.guard';
 import { JwtGuard } from './guards/jwt.guard';
 import { Request } from 'express';
 import { UpdateUserDto } from './dto/UpdateUser.dto';
+import { UserHistoryDto } from './dto/UserHistory.dto';
 
 interface IJwdPayloadUserId {
     id: string, 
@@ -43,9 +44,18 @@ export class AuthController {
     }
 
     @Post('update')
+    @UsePipes(new ValidationPipe())
     @UseGuards(JwtGuard)
     getUpdate(@Req() req: Request, @Body() UpdateUserDto: UpdateUserDto){
         const id = (req.user as IJwdPayloadUserId).id
         return this.AuthService.updateUser(id, UpdateUserDto);
+    }
+
+    @Post('historyupdate')
+    @UsePipes(new ValidationPipe())
+    @UseGuards(JwtGuard)
+    getHistoryUpdate(@Req() req: Request, @Body() UserHistoryDto: UserHistoryDto){
+        const id = (req.user as IJwdPayloadUserId).id
+        return this.AuthService.updateUseHistory(id, UserHistoryDto);
     }
 }

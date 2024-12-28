@@ -25,6 +25,9 @@ export class User extends Document {
     interests: string;
     @Prop({ required: false, unique: false })
     gender: string;
+
+  @Prop({ required: false, unique: false })
+  historyUrls: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

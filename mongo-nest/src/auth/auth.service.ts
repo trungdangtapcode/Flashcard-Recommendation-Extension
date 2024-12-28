@@ -6,6 +6,7 @@ import { CreateUserDto } from "./dto/CreateUser.dto";
 import { LoginUserDto } from "./dto/LoginUser.dto";
 import { UpdateUserDto } from "./dto/UpdateUser.dto";
 import { JwtService } from "@nestjs/jwt"; // Add this line
+import { UserHistoryDto } from "./dto/UserHistory.dto";
 
 @Injectable()
 export class AuthService {
@@ -34,13 +35,13 @@ export class AuthService {
 
     async getUser(id: string){
         const query: any = { _id: new mongoose.Types.ObjectId(id) }
-        const user = await this.userModel.findOne(query);
-        if (!user.hasOwnProperty('name')) user.name = 'Anonymous';
-        if (!user.hasOwnProperty('age')) user.age = 18;
-        if (!user.hasOwnProperty('occupation')) user.occupation = 'Unemployed';
-        if (!user.hasOwnProperty('hobbies')) user.hobbies = 'Nothing';
-        if (!user.hasOwnProperty('interests')) user.interests = 'Nothing';
-        if (!user.hasOwnProperty('gender')) user.gender = 'Non-gendered';
+        const user: any= await this.userModel.findOne(query);
+        if (!('name' in user)) user.name = 'Anonymous';
+        if (!('age' in user)) user.age = 18;
+        if (!('occupation' in user)) user.occupation = 'Unemployed';
+        if (!('hobbies' in user)) user.hobbies = 'Nothing';
+        if (!('interests' in user)) user.interests = 'Nothing';
+        if (!('gender' in user)) user.gender = 'Non-gendered';
         return user;
     }
 
@@ -49,6 +50,13 @@ export class AuthService {
         const {name, bio} = UpdateUserDto;
         const update = {name, ...bio};
         const user = await this.userModel.findOneAndUpdate(query, update);
+        return user
+    }
+    
+    async updateUseHistory(id: string, UpdateUserDto: UserHistoryDto){
+        const query: any = { _id: new mongoose.Types.ObjectId(id) }
+        const {urls} = UpdateUserDto;
+        const user = await this.userModel.findOneAndUpdate(query, {"historyUrls": urls});
         return user
     }
 }

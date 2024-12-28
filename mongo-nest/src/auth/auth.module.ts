@@ -19,9 +19,9 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 
         ]),
         JwtModule.register({
-            secret: process.env.JWT_SECRETORKEY || 'secret', // Use a secure secret in production
+            secret: process.env.JWT_SECRETORKEY || 'abc', // Use a secure secret in production
             // secretOrPrivateKey: process.env.JWT_SECRETORKEY || 'secret',
-            signOptions: { expiresIn: '60m' },
+            signOptions: { expiresIn: '120m' },
         }),
     ],
     providers:[
@@ -29,6 +29,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     ]
     ,
     controllers: [AuthController],
+    exports: [AuthService]
 })
 
 export class AuthModule {};

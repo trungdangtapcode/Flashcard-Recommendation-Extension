@@ -12,7 +12,7 @@ import { UserHistoryDto } from "./dto/UserHistory.dto";
 export class AuthService {
     constructor(
         @InjectModel(User.name) 
-            private userModel: Model<User>,
+            public userModel: Model<User>,
             private jwtService: JwtService
     ) {}
     

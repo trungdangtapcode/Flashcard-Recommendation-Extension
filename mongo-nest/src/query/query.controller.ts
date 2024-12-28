@@ -1,6 +1,14 @@
-import { Body, Controller, Post, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Post, Req, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { QueryService } from './query.service';
 import { QuestionQueryDto } from "./dto/QuestionQuery.dto";
+import { JwtGuard } from "@/auth/guards/jwt.guard";
+import { Request } from 'express';
+
+interface IJwdPayloadUserId {
+    id: string, 
+    iat: number,
+    exp: number
+}
 
 @Controller('query')
 export class QueryController {
@@ -8,8 +16,10 @@ export class QueryController {
 
 	@Post('question')
 	@UsePipes(new ValidationPipe())
-	async queryQuestion(@Body() QuestionQueryDto: QuestionQueryDto){
-		const result = await this.QueryService.queryQuestion(QuestionQueryDto);
+	@UseGuards(JwtGuard)
+	async queryQuestion(@Req() req: Request, @Body() QuestionQueryDto: QuestionQueryDto){
+		const id = (req.user as IJwdPayloadUserId).id
+		const result = await this.QueryService.queryQuestion(id, QuestionQueryDto);
 		return result
 	}
 }

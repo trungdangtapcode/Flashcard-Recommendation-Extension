@@ -128,6 +128,13 @@ const dataUrl = import.meta.env.VITE_BACKEND_URL + "/questions";
 
 const fetchQuestions = async () => {
 try {
+	
+	if (chrome!==undefined && chrome.storage!==undefined) {
+		chrome.storage.local.get("savedEnglishHistoryUrl", (data)=>{
+			const urls = data.savedEnglishHistoryUrl;
+			console.log(urls);
+		});
+	} 
 	setIsLoading(true);
 	const response = await fetch(dataUrl);
 	const data = await response.json();
@@ -176,11 +183,6 @@ const verifyToken = async () => {
 
 useEffect(() => {
 	verifyToken();
-	if (chrome!==undefined && chrome.storage!==undefined) {
-		chrome.storage.local.get("savedEnglishHistoryUrl", (data)=>{
-			console.log(data.savedEnglishHistoryUrl)
-		});
-	}
 }, []);
 
 

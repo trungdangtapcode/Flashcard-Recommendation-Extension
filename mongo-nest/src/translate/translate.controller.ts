@@ -9,8 +9,7 @@ export class TranslateController {
 	@Post()
 	@UsePipes(new ValidationPipe())
 	async translate(@Body() translateDto: TranslateDto){
-		const text = await this.translateService.translate(translateDto)
-		return {"text": text
-		};
+		const result = await this.translateService.translate(translateDto)
+		return result;
 	}
 }

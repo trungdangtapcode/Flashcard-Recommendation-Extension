@@ -29,10 +29,14 @@ useEffect(() => {
 }, [])
 
 useEffect(() => { 
-    if (token) {
-      navigate("/card");
-    }
-  }, [token, navigate]); 
+  if (chrome!==undefined && chrome.storage!==undefined) {
+    console.log(token)
+		chrome.storage.local.set({"englishAccountToken": token}, ()=>{});
+	}
+  if (token) {
+    navigate("/card");
+  }
+}, [token, navigate]); 
 
 const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -7,11 +7,14 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 const backend_url = "http://127.0.0.1:3010";
+const LENGHT_LIMIT_HISTORY = 50
+const LENGHT_LIMIT_TRANSLATE = 100
+
 chrome.contextMenus.onClicked.addListener((info, tab) => {
 if (info.menuItemId !== "translateText" || !info.selectionText) return;
 chrome.scripting.executeScript({
   target: { tabId: tab.id},
-  func: async (info, tab, backend_url) => {
+  func: async (info, tab, backend_url, LENGHT_LIMIT_TRANSLATE) => {
     async function translateText(text) {
       body = { text: text, from: "en", to: "vi" }
       const url = backend_url+"/translate";
@@ -23,9 +26,12 @@ chrome.scripting.executeScript({
         body: JSON.stringify(body),
       });
       const translatedText = await response.json()
-      return translatedText.text;
+      if (response.status !== 201) {
+        return ["Error", "Error"];
+      }
+      return [translatedText.text, translatedText.autocorrect];
     }
-    function addLovePopup(translatedText) {
+    function addLovePopup(translatedText, isError = false) {
       // Get the selection position if text is selected
       const selection = window.getSelection();
       let popupTop = '50%';
@@ -55,7 +61,7 @@ chrome.scripting.executeScript({
       popup.style.transform = useSelectionPosition ? 'translate(0, 0)' : 'translate(-50%, -50%)';
       
       popup.style.padding = '20px';
-      popup.style.backgroundColor = '#fff';
+      popup.style.backgroundColor = isError?'#ef3117':'#fff';
       popup.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
       popup.style.borderRadius = '8px';
       popup.style.zIndex = '1000';
@@ -95,6 +101,9 @@ chrome.scripting.executeScript({
       closeButton.onclick = () => {
           document.body.removeChild(popup);
       };
+      popup.onclick = () => {
+          document.body.removeChild(popup);
+      }
   
       popup.appendChild(closeButton);
   
@@ -107,21 +116,24 @@ chrome.scripting.executeScript({
       }, 5000);
     }
     
-    localStorage.setItem("savedEnglishHistoryUrl", "Tom");
-    const LENGHT_LIMIT = 10
-    const translatedText = await translateText(info.selectionText);
+    const LENGHT_LIMIT = LENGHT_LIMIT_TRANSLATE
+    const [translatedText, autocorrectedText] = await translateText(info.selectionText);
+    if (translatedText === "Error") {
+      addLovePopup("Có lỗi xảy ra khi dịch văn bản. Vui lòng thử lại sau.", true);
+      return;
+    }
     addLovePopup(translatedText);
     chrome.storage.local.get({ savedEnglishTexts: [] }, (data) => {
       if (data.savedEnglishTexts.length>LENGHT_LIMIT){
         data.savedEnglishTexts = data.savedEnglishTexts.slice(-LENGHT_LIMIT)
       }
-      const updatedTexts = [...data.savedEnglishTexts, info.selectionText];
+      const updatedTexts = [...data.savedEnglishTexts, autocorrectedText];
       chrome.storage.local.set({ savedEnglishTexts: updatedTexts }, () => {
         // alert(translatedText);
       });
     });
   },
-  args: [info, tab, backend_url]
+  args: [info, tab, backend_url, LENGHT_LIMIT_TRANSLATE]
 });
 
 });
@@ -143,22 +155,22 @@ chrome.history.onVisited.addListener(()=>{
     {currentWindow: true, active : true},
     saveLocal
   )
-  const LENGHT_LIMIT = 50
-  chrome.history.search({text: '', maxResults: LENGHT_LIMIT}, async function(data) {
+  chrome.history.search({text: '', maxResults: LENGHT_LIMIT_HISTORY}, async function(data) {
     chrome.storage.local.set({ savedEnglishHistoryUrl: data }, () => {
     })
-    url = backend_url+"/auth/historyupdate"
-    body = {"urls": data.map((item) => item.url)}
-    const response=  await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-    const responseData = await response.json()
-    chrome.storage.local.get("token", (result) => {
-      console.log("Token retrieved:", result.token);
+    chrome.storage.local.get("englishAccountToken", async (result) => {
+      url = backend_url+"/auth/historyupdate"
+      body = {"urls": data.map((item) => item.url)}
+      const response=  await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${result.englishAccountToken}`
+        },
+        body: JSON.stringify(body),
+      });
+      const responseData = await response.json()
+      console.log(responseData, result.englishAccountToken)
     });
 });
 }

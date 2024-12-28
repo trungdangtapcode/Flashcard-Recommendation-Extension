@@ -8,6 +8,9 @@ export class TranslateService {
 	async translate(translateDto: TranslateDto){
 		const res = await translate(translateDto.text, 
 			{ from: translateDto.from, to: translateDto.to, autoCorrect: true });
-		return res.text;
+		return {
+			"text": res.text,
+			"autocorrect": res.from.text.autoCorrected? res.from.text.value : translateDto.text,
+		}
 	}
 }

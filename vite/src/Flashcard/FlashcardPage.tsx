@@ -4,6 +4,8 @@ import "./App.css";
 import Question from "./Question.tsx";
 import { useNavigate } from "react-router-dom";
 
+// import {useChromeStorageLocal} from 'use-chrome-storage';
+
 // const FlashcardPagetmp = () => {
 //   const [flashcards, setFlashcards] = useState([]);
 //   const [categories, setCategories] = useState<ICategories[]>([]);
@@ -170,8 +172,14 @@ const verifyToken = async () => {
 		console.log(`An error occurred ${err}`);
 	}
 };
+// const [value] = useChromeStorageLocal('savedEnglishHistoryUrl', 1);
+
 useEffect(() => {
 	verifyToken();
+	// chrome.storage.local.get("savedEnglishHistoryUrl", function(data) {
+	// 	console.log(data.savedEnglishHistoryUrl);
+	// });
+	console.log(localStorage.getItem("savedEnglishHistoryUrl"));
 }, []);
 
 useEffect(() => {

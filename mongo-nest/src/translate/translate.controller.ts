@@ -1,4 +1,4 @@
-import { Body, Controller, Get, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Post, UsePipes, ValidationPipe } from "@nestjs/common";
 import { TranslateDto } from "./dto/translate.dto";
 import { TranslateService } from "./translate.service";
 
@@ -6,9 +6,11 @@ import { TranslateService } from "./translate.service";
 export class TranslateController {
 	constructor(private translateService: TranslateService) {}
 
-	@Get()
+	@Post()
 	@UsePipes(new ValidationPipe())
-	translate(@Body() translateDto: TranslateDto){
-		return this.translateService.translate(translateDto);
+	async translate(@Body() translateDto: TranslateDto){
+		const text = await this.translateService.translate(translateDto)
+		return {"text": text
+		};
 	}
 }

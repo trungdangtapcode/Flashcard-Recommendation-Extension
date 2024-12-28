@@ -1,6 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import './App.css'
 import { useEffect, useState } from 'react'
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProfileEditorPage = () => {
   const [profile, setProfile] = useState({
@@ -85,7 +87,7 @@ const ProfileEditorPage = () => {
       
       const data = await response.json();
       if (response.ok) {
-        alert("Profile updated successfully");
+        toast.success('Update successful');
       } else {
         console.log(data.message);
         if (response.status === 401) {
@@ -93,6 +95,7 @@ const ProfileEditorPage = () => {
         }
       }
     } catch (err) {
+      toast.error('An error occurred');
       console.log(`An error occurred ${err}`);
     }
   };
@@ -184,6 +187,7 @@ const ProfileEditorPage = () => {
         </form>
       </div>
     </div>
+    <ToastContainer />
     </div>
   );
 };

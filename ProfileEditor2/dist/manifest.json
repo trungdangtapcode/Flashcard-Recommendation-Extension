@@ -1,0 +1,30 @@
+{
+    "manifest_version": 3,
+    "name": "First Extension",
+    "description": "Base Level Extension",
+    "version": "1.0",
+    "action": {
+      "default_icon": "Japan.png",
+      "default_popup": "index.html"
+    },
+    "permissions": [
+      "contextMenus", 
+      "storage",
+      "activeTab",
+      "scripting"
+    ],
+    "content_scripts": [
+    {
+      "js": ["popup/popup.js"],
+      "matches": [
+        "https://developer.chrome.com/docs/extensions/*",
+        "https://developer.chrome.com/docs/webstore/*",
+        "file:///D:/git/workplace/japanese_learning_system/test/article.html"
+      ]
+    }
+    ],
+    "background": {
+      "service_worker": "background/translate_work.js",
+      "scripts": ["background/translate_work.js"]
+    }
+}

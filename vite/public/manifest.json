@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "First Extension",
+  "name": "English Word Recommendation",
   "description": "Base Level Extension",
   "version": "1.0",
   "action": {
@@ -29,7 +29,6 @@
   }
   ],
   "background": {
-    "service_worker": "background/translate_work.js",
-    "scripts": ["background/translate_work.js"]
+    "service_worker": "background/translate_work.js"
   }
 }

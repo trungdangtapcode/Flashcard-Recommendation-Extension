@@ -7,6 +7,7 @@ import { JwtGuard } from './guards/jwt.guard';
 import { Request } from 'express';
 import { UpdateUserDto } from './dto/UpdateUser.dto';
 import { UserHistoryDto } from './dto/UserHistory.dto';
+import { UserPointUpdateDto } from './dto/UserPointUpdate.dto';
 
 interface IJwdPayloadUserId {
     id: string, 
@@ -57,5 +58,13 @@ export class AuthController {
     getHistoryUpdate(@Req() req: Request, @Body() UserHistoryDto: UserHistoryDto){
         const id = (req.user as IJwdPayloadUserId).id
         return this.AuthService.updateUseHistory(id, UserHistoryDto);
+    }
+
+    @Post('pointadd')
+    @UseGuards(JwtGuard)
+    @UsePipes(new ValidationPipe())
+    addUserPoint(@Req() req: Request, @Body() UserPointUpdateDto: UserPointUpdateDto){
+        const id = (req.user as IJwdPayloadUserId).id
+        return this.AuthService.addUserPoint(id, UserPointUpdateDto);
     }
 }

@@ -9,6 +9,7 @@ interface IFlashcardItem {
 interface ICategories { id: number; name: string }
 
 interface IQuestionProps {
+    word_id: number,
     question: string, 
     answers: string[], 
     correctId: number, 
@@ -18,4 +19,5 @@ interface IQuestion {
     question: string;
     answers: string[];
     correct_id: number;
+    word_id: number;
 }

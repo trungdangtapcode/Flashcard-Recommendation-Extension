@@ -7,8 +7,8 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 const backend_url = "http://127.0.0.1:3010";
-const LENGHT_LIMIT_HISTORY = 50
-const LENGHT_LIMIT_TRANSLATE = 100
+const LENGHT_LIMIT_HISTORY = 10
+const LENGHT_LIMIT_TRANSLATE = 30
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
 if (info.menuItemId !== "translateText" || !info.selectionText) return;
@@ -128,6 +128,7 @@ chrome.scripting.executeScript({
         data.savedEnglishTexts = data.savedEnglishTexts.slice(-LENGHT_LIMIT)
       }
       const updatedTexts = [...data.savedEnglishTexts, autocorrectedText];
+      console.log("updatedTexts", updatedTexts)
       chrome.storage.local.set({ savedEnglishTexts: updatedTexts }, () => {
         // alert(translatedText);
       });

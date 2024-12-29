@@ -3,6 +3,7 @@ import "./App.css";
 // import axios from "axios";
 import Question from "./Question.tsx";
 import { useNavigate } from "react-router-dom";
+import { ColorRing } from "react-loader-spinner";
 
 // import {useChromeStorageLocal} from 'use-chrome-storage';
 
@@ -124,21 +125,66 @@ const FlashcardPage = () => {
 const [questions, setQuestions] = useState<IQuestion[]>([]);
 const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
 const [isLoading, setIsLoading] = useState<boolean>(false);
-const dataUrl = import.meta.env.VITE_BACKEND_URL + "/questions";
+const dataUrl = import.meta.env.VITE_BACKEND_URL + "/query/question";
+
+interface IBody {
+	historyUrls?: string[],
+	corpus?: string
+}
 
 const fetchQuestions = async () => {
 try {
-	
-	if (chrome!==undefined && chrome.storage!==undefined) {
-		chrome.storage.local.get("savedEnglishHistoryUrl", (data)=>{
-			const urls = data.savedEnglishHistoryUrl;
-			console.log(urls);
+	const fetchFromBody = async (body:IBody ) => {
+		const token = localStorage.getItem("token");
+		const bodyString: string = JSON.stringify(body);
+		setIsLoading(true);
+		// console.log('body String: ', bodyString)
+		
+		// console.log('con cac he')
+		const response = await fetch(dataUrl, {
+			method: 'POST',
+			headers: {
+			  'Accept': 'application/json',
+			  'Content-Type': 'application/json',
+			  'Authorization': `Bearer ${token}`,
+			},
+			body: bodyString
 		});
-	} 
-	setIsLoading(true);
-	const response = await fetch(dataUrl);
-	const data = await response.json();
-	setQuestions((prev) => [...prev, ...data]);
+		
+		// console.log('con cac he 2')
+		// console.log(await response.json());
+		const data = await response.json();
+		// console.log('fetched data ', data)
+		// setQuestions(questions)
+		setQuestions((prev) => [...prev, ...data]);
+	}
+
+	const getDataChromeStorage = () : Promise<IBody> => {
+	  	return new Promise((resolve, reject) => {
+			const body: IBody  =  {};
+			if (chrome!==undefined && chrome.storage!==undefined) {
+				chrome.storage.local.get(["savedEnglishHistoryUrl", "savedEnglishTexts"], (data)=>{
+					const urls = data.savedEnglishHistoryUrl;
+					if (chrome.runtime.lastError) {
+						reject(chrome.runtime.lastError);
+					}
+					if (urls)
+						body.historyUrls = urls.map((item: {url: string}) => item.url);
+
+					const texts = data.savedEnglishTexts;
+					if (texts){
+						const combinedText = texts.join(" ");
+						body.corpus = combinedText;
+					}
+					resolve(body);
+				});
+			} else {
+				resolve(body); //empty
+			}
+	  	});
+	}
+	const body = await getDataChromeStorage();
+	await fetchFromBody(body)
 } catch (error) {
 	console.error("Error fetching questions:", error);
 } finally {
@@ -168,7 +214,7 @@ const verifyToken = async () => {
 		});
 		const data = await response.json();
 		if (response.ok) {
-		console.log(data);
+		console.log('verified user data: ',data);
 		} else {
 			console.log(data.message);
 			if (response.status === 401) {
@@ -203,6 +249,7 @@ const currentQuestion = questions[currentQuestionIndex];
 
 return (
 	<div className="w-screen">
+		
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
     	<div className="w-full max-w-md ">
 			<button onClick={profileHandler}
@@ -212,9 +259,18 @@ return (
 				className="text-black px-2 rounded-none
 				hover:bg-red-600 hover:text-white">LOG OUT</button>
 		</div>
-		{isLoading && <p>Loading questions...</p>}
+		{isLoading && <ColorRing
+			visible={true}
+			height="80"
+			width="80"
+			ariaLabel="color-ring-loading"
+			wrapperStyle={{}}
+			wrapperClass="color-ring-wrapper"
+			colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+		/>}
 		{currentQuestion ? (
 			<Question
+			word_id={ currentQuestion.word_id}
 			question={currentQuestion.question}
 			answers={currentQuestion.answers}
 			correctId={currentQuestion.correct_id}

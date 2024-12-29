@@ -28,6 +28,15 @@ export class User extends Document {
 
   @Prop({ required: false, unique: false })
   historyUrls: string[];
+
+  @Prop({ required: false, unique: false })
+  learningData: [
+    {
+      word_id: number,
+      time: number,
+      point: number,
+    },
+  ]
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

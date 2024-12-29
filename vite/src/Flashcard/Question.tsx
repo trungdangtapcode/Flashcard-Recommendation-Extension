@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-const Question = ({ question, answers, correctId, onNext }: IQuestionProps) => {
+const Question = ({ question, answers, correctId, onNext, word_id }: IQuestionProps) => {
   const [selectedAnswer, setSelectedAnswer] = useState<number|null>(null);
   const [showCorrect, setShowCorrect] = useState(false);
 
@@ -11,7 +11,23 @@ const Question = ({ question, answers, correctId, onNext }: IQuestionProps) => {
     setShowCorrect(true);
   };
 
-  const handleNextClick = () => {
+  const handleNextClick = async (score: number, isCorrected: number) => {
+    // send score to backend
+    const finalScore = (score+5*isCorrected)/10;
+
+    const url = import.meta.env.VITE_BACKEND_URL;
+		const token = localStorage.getItem("token");
+		fetch(url + "/auth/pointadd", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({word_id: word_id, point: finalScore}),
+		});
+
+    console.log('score ',finalScore, word_id);
+
     setSelectedAnswer(null);
     setShowCorrect(false);
     onNext();
@@ -59,7 +75,7 @@ const Question = ({ question, answers, correctId, onNext }: IQuestionProps) => {
                         `,
                         bg_color[score - 1]
                     )}
-                    onClick={handleNextClick}
+                    onClick={()=>handleNextClick(score, correctId===selectedAnswer?1:0)}
                 >
                     {score}
                 </button>

@@ -1,14 +1,21 @@
 import { UserBioDto } from "@/auth/dto/UserBio.dto";
-import { IsNotEmpty, IsOptional } from "class-validator";
+import { IsOptional } from "class-validator";
+
 
 
 export class QuestionQueryDto {
-	@IsNotEmpty()
+	@IsOptional()
 	corpus: string; // or sentence
 
 	@IsOptional()
 	historyUrls: string[];
 
-	@IsNotEmpty()
+	@IsOptional()
 	bio: UserBioDto;
+
+	@IsOptional()
+	confScores: {
+		word_id: number
+		score: number
+	}[]
 }

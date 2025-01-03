@@ -46,7 +46,7 @@ export class QueryService {
 		// return '[{"word_id":156386,"question":"Industrial science; the science of systematic knowledge of the industrial arts  especially of the more important manufactures as spinning weaving metallurgy etc.","answers":["Resuming","Paint","Technology","Juvenal"],"correct_id":2},{"word_id":31294,"question":"A conceptualist.","answers":["Feme","Conceptionalist","Mannish","Human"],"correct_id":1}]'
 		try {
 			// const url = process.env.FASTAPI_URL + '/question';
-			const url = "https://cd48-34-32-245-41.ngrok-free.app/question";
+			const url = "https://8510-34-82-193-114.ngrok-free.app/question";
 			console.log('url: ',url);
 			const response = await firstValueFrom(this.HttpService.post(url, QuestionQueryDto));
 			return response.data;

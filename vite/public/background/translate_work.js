@@ -127,7 +127,7 @@ chrome.scripting.executeScript({
       if (data.savedEnglishTexts.length>LENGHT_LIMIT){
         data.savedEnglishTexts = data.savedEnglishTexts.slice(-LENGHT_LIMIT)
       }
-      const updatedTexts = [...data.savedEnglishTexts, autocorrectedText];
+      const updatedTexts = [...data.savedEnglishTexts, { word_id: 0, score: autocorrectedText }];
       console.log("updatedTexts", updatedTexts)
       chrome.storage.local.set({ savedEnglishTexts: updatedTexts }, () => {
         // alert(translatedText);

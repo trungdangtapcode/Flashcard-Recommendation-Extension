@@ -68,11 +68,13 @@ export class AuthService {
         }
         if (!('time' in data)) (data as any).time = Math.floor(Date.now() / 1000);
     
-        user.learningData.push({
+        console.log('adding to ',id, ' data: ',data);
+        const new_point = {
           word_id: data.word_id,
           time: data.time,
           point: data.point,
-        });
+        }
+        user.learningData.push(new_point);
         await user.save();
     }
     async getUserScores(_id: string): Promise<{ word_id: number; score: number }[]> {

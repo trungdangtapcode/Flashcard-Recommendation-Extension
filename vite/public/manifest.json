@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "English Word Recommendation",
-  "description": "Base Level Extension",
+  "description": "English Word Recommendation using BEiT",
   "version": "1.0",
   "action": {
     "default_icon": "Japan.png",

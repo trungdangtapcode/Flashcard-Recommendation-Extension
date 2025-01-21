@@ -4,13 +4,15 @@ import { AuthService } from '../auth/auth.service';
 import mongoose from "mongoose";
 import { HttpService } from "@nestjs/axios";
 import { firstValueFrom } from "rxjs";
+import AccountService from '../account/account.service';
 
 
 @Injectable()
 export class QueryService {
 	constructor(
 		private readonly AuthService:AuthService,
-		private readonly HttpService: HttpService
+		private readonly HttpService: HttpService,
+		private readonly AccountService: AccountService
 	) {}
 
 	async queryQuestion(id: string, QuestionQueryDto: QuestionQueryDto){
@@ -38,12 +40,12 @@ export class QueryService {
 			(QuestionQueryDto as any).bio = bio;
 		}
 		if (!('confScores' in QuestionQueryDto)){
-			const confScores = await this.AuthService.getUserScores(id);
+			const confScores = await this.AccountService.getUserScores(id);
 			(QuestionQueryDto as any).confScores = confScores;
 		}
 		console.log('after Dto: ',QuestionQueryDto);
 		console.log(QuestionQueryDto.historyUrls.length);
-		// return '[{"word_id":156386,"question":"Industrial science; the science of systematic knowledge of the industrial arts  especially of the more important manufactures as spinning weaving metallurgy etc.","answers":["Resuming","Paint","Technology","Juvenal"],"correct_id":2},{"word_id":31294,"question":"A conceptualist.","answers":["Feme","Conceptionalist","Mannish","Human"],"correct_id":1}]'
+		return '[{"word_id":156386,"question":"Industrial science; the science of systematic knowledge of the industrial arts  especially of the more important manufactures as spinning weaving metallurgy etc.","answers":["Resuming","Paint","Technology","Juvenal"],"correct_id":2},{"word_id":31294,"question":"A conceptualist.","answers":["Feme","Conceptionalist","Mannish","Human"],"correct_id":1}]'
 		try {
 			// const url = process.env.FASTAPI_URL + '/question';
 			const url = "https://8510-34-82-193-114.ngrok-free.app/question";

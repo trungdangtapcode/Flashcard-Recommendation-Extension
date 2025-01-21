@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule} from '@nestjs/config';
 import { TranslateModule } from './translate/translate.module';
 import { QueryModule } from './query/query.module';
+import { AccountModule } from './account/account.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { QueryModule } from './query/query.module';
     MongooseModule.forRoot(process.env.MONGO_URI),
     TranslateModule,
     QueryModule,
+    AccountModule,
   ],
   controllers: [AppController],
   providers: [AppService],

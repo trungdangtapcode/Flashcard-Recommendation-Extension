@@ -1,5 +1,5 @@
 import { IsNotEmpty } from "class-validator";
-import { UserBioDto } from "./UserBio.dto";
+import { UserBioDto } from "../../auth/dto/UserBio.dto";
 
 export class UpdateUserDto {
 	@IsNotEmpty()

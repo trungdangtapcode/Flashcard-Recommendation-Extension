@@ -1,19 +1,9 @@
-import {Body, Controller, Get, Post, Req, UseFilters, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
+import {Body, Controller, Post, Req, UseFilters, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/CreateUser.dto';
 import { MongoExceptionFilter } from '@/validation-error.filter';
 import { LocalGuard } from './guards/local.guard';
-import { JwtGuard } from './guards/jwt.guard';
 import { Request } from 'express';
-import { UpdateUserDto } from './dto/UpdateUser.dto';
-import { UserHistoryDto } from './dto/UserHistory.dto';
-import { UserPointUpdateDto } from './dto/UserPointUpdate.dto';
-
-interface IJwdPayloadUserId {
-    id: string, 
-    iat: number,
-    exp: number
-}
 
 @Controller('auth')
 export class AuthController {
@@ -34,37 +24,5 @@ export class AuthController {
     verifyUser(@Req() req: Request){
         console.log('In Verify User (Controller)');
         return req.user;
-    }
-
-    @Get('status')
-    @UseGuards(JwtGuard)
-    getUser(@Req() req: Request){
-        const id = (req.user as IJwdPayloadUserId).id
-        const userData = this.AuthService.getUser(id);
-        return userData;
-    }
-
-    @Post('update')
-    @UsePipes(new ValidationPipe())
-    @UseGuards(JwtGuard)
-    getUpdate(@Req() req: Request, @Body() UpdateUserDto: UpdateUserDto){
-        const id = (req.user as IJwdPayloadUserId).id
-        return this.AuthService.updateUser(id, UpdateUserDto);
-    }
-
-    @Post('historyupdate')
-    @UsePipes(new ValidationPipe())
-    @UseGuards(JwtGuard)
-    getHistoryUpdate(@Req() req: Request, @Body() UserHistoryDto: UserHistoryDto){
-        const id = (req.user as IJwdPayloadUserId).id
-        return this.AuthService.updateUseHistory(id, UserHistoryDto);
-    }
-
-    @Post('pointadd')
-    @UseGuards(JwtGuard)
-    @UsePipes(new ValidationPipe())
-    addUserPoint(@Req() req: Request, @Body() UserPointUpdateDto: UserPointUpdateDto){
-        const id = (req.user as IJwdPayloadUserId).id
-        return this.AuthService.addUserPoint(id, UserPointUpdateDto);
     }
 }

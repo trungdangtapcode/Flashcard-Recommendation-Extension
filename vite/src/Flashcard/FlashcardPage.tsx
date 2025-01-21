@@ -4,122 +4,9 @@ import "./App.css";
 import Question from "./Question.tsx";
 import { useNavigate } from "react-router-dom";
 import { ColorRing } from "react-loader-spinner";
+import { toast, ToastContainer } from 'react-toastify';
 
-// import {useChromeStorageLocal} from 'use-chrome-storage';
 
-// const FlashcardPagetmp = () => {
-//   const [flashcards, setFlashcards] = useState([]);
-//   const [categories, setCategories] = useState<ICategories[]>([]);
-
-//   const categoryEl = useRef<HTMLSelectElement | null>(null);
-//   const amountEl = useRef<HTMLInputElement | null>(null);
-
-//   const verifyToken = async () => {
-//     try {
-//       const url = import.meta.env.VITE_BACKEND_URL;
-//       const token = localStorage.getItem("token");
-//       const response = await fetch(url + "/auth/status", {
-//         method: "GET",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${token}`,
-//         },
-//       });
-//       const data = await response.json();
-//       if (response.ok) {
-//         console.log(data);
-//       } else {
-//         console.log(data.message);
-//       }
-//     } catch (err) {
-//       console.log(`An error occurred ${err}`);
-//     }
-//   };
-
-//   useEffect(() => {
-//     axios.get("https://opentdb.com/api_category.php").then((res) => {
-//       setCategories(res.data.trivia_categories);
-//     });
-//   }, []);
-
-//   useEffect(() => {
-//     verifyToken();
-//   }, []);
-
-//   function decodeString(str: string) {
-//     const textArea = document.createElement("textarea");
-//     textArea.innerHTML = str;
-//     return textArea.value;
-//   }
-
-//   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-//     e.preventDefault();
-//     axios
-//       .get("https://opentdb.com/api.php", {
-//         params: {
-//           amount: amountEl.current?.value,
-//           category: categoryEl.current?.value,
-//         },
-//       })
-
-//       .then((res) => {
-//         setFlashcards(
-//           res.data.results.map(
-//             (questionItem: IFlashcardItem, index: number) => {
-//               const answer = decodeString(questionItem.correct_answer);
-//               const options = [
-//                 ...questionItem.incorrect_answers.map((a) => decodeString(a)),
-//                 answer,
-//               ];
-//               return {
-//                 id: `${index}-${Date.now()}`,
-//                 question: decodeString(questionItem.question),
-//                 answer: answer,
-//                 options: options.sort(() => Math.random() - 0.5),
-//               };
-//             }
-//           )
-//         );
-//       });
-//   }
-
-//   return (
-//     <>
-//       <button onClick={logoutHandler}>LOG OUT</button>
-//       <form className="header" onSubmit={handleSubmit}>
-//         <div className="form-group">
-//           <label htmlFor="category">Category</label>
-//           <select id="category" ref={categoryEl}>
-//             {categories.map((category) => {
-//               return (
-//                 <option value={category.id} key={category.id}>
-//                   {category.name}
-//                 </option>
-//               );
-//             })}
-//           </select>
-//         </div>
-//         <div className="form-group">
-//           <label htmlFor="amount">Number of Questions</label>
-//           <input
-//             type="number"
-//             id="amount"
-//             min="1"
-//             step="1"
-//             defaultValue={10}
-//             ref={amountEl}
-//           />
-//         </div>
-//         <div className="form-group">
-//           <button className="btn">Generate</button>
-//         </div>
-//       </form>
-//       <div className="container">
-//         <FlashcardList flashcards={flashcards} />
-//       </div>
-//     </>
-//   );
-// };
 
 const FlashcardPage = () => {
 const [questions, setQuestions] = useState<IQuestion[]>([]);
@@ -138,9 +25,7 @@ try {
 		const token = localStorage.getItem("token");
 		const bodyString: string = JSON.stringify(body);
 		setIsLoading(true);
-		// console.log('body String: ', bodyString)
-		
-		// console.log('con cac he')
+
 		const response = await fetch(dataUrl, {
 			method: 'POST',
 			headers: {
@@ -151,11 +36,13 @@ try {
 			body: bodyString
 		});
 		
-		// console.log('con cac he 2')
-		// console.log(await response.json());
 		const data = await response.json();
-		// console.log('fetched data ', data)
-		// setQuestions(questions)
+		if (!response.ok) {
+			toast.error("Failed to fetch BODY");
+			console.error("Failed to fetch BODY: ", data);
+			return;
+		}
+
 		setQuestions((prev) => [...prev, ...data]);
 	}
 
@@ -186,6 +73,7 @@ try {
 	const body = await getDataChromeStorage();
 	await fetchFromBody(body)
 } catch (error) {
+	toast.error("Failed to fetch questions");
 	console.error("Error fetching questions:", error);
 } finally {
 	setIsLoading(false);
@@ -280,6 +168,7 @@ return (
 			!isLoading && <p>No questions available.</p>
 		)}
     </div>
+	<ToastContainer/>
 	</div>
   );
 };

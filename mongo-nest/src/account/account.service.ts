@@ -1,11 +1,13 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import mongoose from "mongoose";
-
+import { v4 as uuidv4} from 'uuid';
 
 import { UpdateUserDto } from "./dto/UpdateUser.dto";
 import { UserHistoryDto } from "./dto/UserHistory.dto";
 import { UserPointUpdateDto } from "./dto/UserPointUpdate.dto";
 import { AuthService } from "@/auth/auth.service";
+import { DeckDto } from "./dto/Deck.dto";
+import { FlashcardDto } from "./dto/Flashcard.dto";
 
 @Injectable()
 class AccountService{
@@ -81,6 +83,69 @@ class AccountService{
           score: Number(score),
         }));
     }
+  	async addUserDeck(userId: string, deck: DeckDto){
+		const user: any = await this.AuthService.userModel.findById(userId);
+		console.log(user.decks)
+		if (!user) {
+			throw new NotFoundException('User not found');
+		}
+		deck.deckId = uuidv4();
+		if ('decks' in user) user.decks.push(deck);
+		else user.decks = [deck];
+		await user.save();
+  	}
+	async addUserDeckCard(userId: string, deckId: string, card: FlashcardDto){
+		const user: any = await this.AuthService.userModel.findById(userId);
+		if (!user) {
+			throw new NotFoundException('User not found');
+		}
+		//first element satisfying the condition
+		const deck = user.decks.find((deck: any) => deck.deckId === deckId);
+		if (!deck) {
+			throw new NotFoundException('Deck not found');
+		}
+		deck.cards.push(card);
+		await user.save();
+	}
+	async getUserDecks(userId: string){
+		const user: any = await this.AuthService.userModel.findById(userId);
+		if (!user) {
+			throw new NotFoundException('User not found');
+		}
+		return user.decks;
+	}
+	async getUserDeck(userId: string, deckId: string){
+		const user: any = await this.AuthService.userModel.findById(userId);
+		if (!user) {
+			throw new NotFoundException('User not found');
+		}
+		const deck = user.decks.find((deck: any) => deck.deckId === deckId);
+		if (!deck) {
+			throw new NotFoundException('Deck not found');
+		}
+		return deck;
+	}
+	async setUserDeck(userId: string, deck: DeckDto){
+		const user: any = await this.AuthService.userModel.findById(userId);
+		if (!user) {
+			throw new NotFoundException('User not found');
+		}
+		const deckId = deck.deckId;
+		const index = user.decks.findIndex((deck: any) => deck.deckId === deckId);
+		if (index === -1) {
+			throw new NotFoundException('Deck not found');
+		}
+		user.decks[index] = deck;
+		await user.save();
+	}
+	async setUserDecks(userId: string, decks: DeckDto[]){
+		const user: any = await this.AuthService.userModel.findById(userId);
+		if (!user) {
+			throw new NotFoundException('User not found');
+		}
+		user.decks = decks;
+		await user.save();
+	}
 }
 
 export default AccountService;

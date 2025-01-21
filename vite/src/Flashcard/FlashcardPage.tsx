@@ -93,7 +93,7 @@ const verifyToken = async () => {
 	try {
 		const url = import.meta.env.VITE_BACKEND_URL;
 		const token = localStorage.getItem("token");
-		const response = await fetch(url + "/auth/status", {
+		const response = await fetch(url + "/account/status", {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",

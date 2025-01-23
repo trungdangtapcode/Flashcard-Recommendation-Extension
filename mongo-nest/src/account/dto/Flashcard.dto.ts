@@ -7,8 +7,4 @@ export class FlashcardDto {
 	answer: string;
 	@IsOptional()
 	confidence: number = 0; //[ClassA] <> ClassA[], check the schema
-	// confidence: {
-	// 	type: number,
-	// 	default: 0,
-	// };
 }

@@ -70,4 +70,18 @@ export default class AccountController{
 		const deckId: string = AddFlashcardDto.deckId;
 		return this.AccountService.addUserDeckCard(id, deckId, flashcard);
 	}
+	@Post('setDecks')
+	@UseGuards(JwtGuard)
+	@UsePipes(new ValidationPipe())
+	setDecks(@Req() req: Request, @Body() DeckDto: DeckDto[]){
+		const id = (req.user as IJwdPayloadUserId).id
+		return this.AccountService.setUserDecks(id, DeckDto);
+	}
+	@Post('setDeck')
+	@UseGuards(JwtGuard)
+	@UsePipes(new ValidationPipe())
+	setDeck(@Req() req: Request, @Body() DeckDto: DeckDto){
+		const id = (req.user as IJwdPayloadUserId).id
+		return this.AccountService.setUserDeck(id, DeckDto);
+	}
 }

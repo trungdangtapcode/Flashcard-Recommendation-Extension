@@ -104,6 +104,7 @@ class AccountService{
 		if (!deck) {
 			throw new NotFoundException('Deck not found');
 		}
+		if (!('cards' in deck)) deck.cards = [];
 		deck.cards.push(card);
 		await user.save();
 	}

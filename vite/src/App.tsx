@@ -9,6 +9,8 @@ import { HashRouter as Router, Route, Routes} from 'react-router-dom'
 import RegisterPage from './Register/RegisterPage'
 import FlashcardPage from './Flashcard/FlashcardPage'
 import ProfileEditorPage from './ProfileEditor/ProfileEditorPage'
+import DeckHomePage from './EditorPage/DeckHomePage'
+import DeckCreatePage from './EditorPage/DeckCreatePage.tsx'
 
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/card" element={<FlashcardPage/>} />
         <Route path="/profile" element={<ProfileEditorPage />} />
+        <Route path="/deckhome" element={<DeckHomePage/>}/>
+        <Route path="/deckcreate" element={<DeckCreatePage/>}/>
         <Route path="/" element={<LoginPage/>} />
       </Routes>
     </Router>

@@ -5,6 +5,7 @@ import Question from "./Question.tsx";
 import { useNavigate } from "react-router-dom";
 import { ColorRing } from "react-loader-spinner";
 import { toast, ToastContainer } from 'react-toastify';
+import { LogoutHandler, ProfileHandler, verifyToken } from "../utils/auth.tsx";
 
 
 
@@ -81,43 +82,17 @@ try {
 };
 
 const navigate = useNavigate();
-const logoutHandler = () => {
-	localStorage.removeItem("token");
-	navigate("/login");
-};
-const profileHandler = () => {
-	navigate("/profile");
-}
-
-const verifyToken = async () => {
-	try {
-		const url = import.meta.env.VITE_BACKEND_URL;
-		const token = localStorage.getItem("token");
-		const response = await fetch(url + "/account/status", {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
-		},
-		});
-		const data = await response.json();
-		if (response.ok) {
-		console.log('verified user data: ',data);
-		} else {
-			console.log(data.message);
-			if (response.status === 401) {
-				logoutHandler();
-			}
-		}
-	} catch (err) {
-		console.log(`An error occurred ${err}`);
-	}
-};
 // const [value] = useChromeStorageLocal('savedEnglishHistoryUrl', 1);
 
 useEffect(() => {
-	verifyToken();
+	verifyToken(()=>{},navigate);
 }, []);
+const logoutHandler = () => {
+	LogoutHandler(navigate);	
+}
+const profileHandler = () => {
+	ProfileHandler(navigate);
+}
 
 
 useEffect(() => {
@@ -132,6 +107,7 @@ if (currentQuestionIndex + 1 >= questions.length) {
 }
 setCurrentQuestionIndex((prev) => prev + 1);
 };
+
 
 const currentQuestion = questions[currentQuestionIndex];
 

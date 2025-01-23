@@ -1,0 +1,79 @@
+.deck-box {
+	display: block;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 16px;
+	width: 250px;
+	background-color: #f9f9f9;
+	position: relative;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	transition: transform 0.3s, box-shadow 0.3s;
+  
+	&:hover {
+	  transform: translateY(-5px);
+	  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+	}
+  
+	.box-name {
+	  font-size: 1.5rem;
+	  color: #222;
+	  font-weight: bold;
+	  margin-bottom: 8px;
+	}
+  
+	.box-description {
+	  font-size: 1rem;
+	  color: #444;
+	  margin-bottom: 16px;
+	  animation: fadeIn 0.3s ease-in-out;
+	}
+  
+	.box-actions {
+	  display: flex;
+	  justify-content: flex-end;
+	  gap: 8px;
+  
+	  .action-button {
+		background: none;
+		border: none;
+		font-size: 1.2rem;
+		cursor: pointer;
+		padding: 8px;
+		border-radius: 50%;
+		transition: background-color 0.3s;
+  
+		&:hover {
+		  background-color: #f0f0f0;
+		}
+  
+		&.delete-button {
+		  color: #e74c3c;
+  
+		  &:hover {
+			background-color: #ffecec;
+		  }
+		}
+  
+		&.edit-button {
+		  color: #3498db;
+  
+		  &:hover {
+			background-color: #e8f4fd;
+		  }
+		}
+	  }
+	}
+  
+	@keyframes fadeIn {
+	  from {
+		opacity: 0;
+		transform: translateY(-10px);
+	  }
+	  to {
+		opacity: 1;
+		transform: translateY(0);
+	  }
+	}
+  }
+  

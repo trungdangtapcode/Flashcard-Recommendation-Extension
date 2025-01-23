@@ -3,6 +3,7 @@ import './App.css'
 import { useEffect, useState } from 'react'
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { verifyToken, LogoutHandler } from '../utils/auth';
 
 const ProfileEditorPage = () => {
   const [profile, setProfile] = useState({
@@ -16,49 +17,18 @@ const ProfileEditorPage = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   
   const navigate = useNavigate();
-  const logoutHandler = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
-  const verifyToken = async () => {
-    try {
-      const url = import.meta.env.VITE_BACKEND_URL;
-      const token = localStorage.getItem("token");
-      if (!token) {
-        logoutHandler()
-        return;
-      }
-      const response = await fetch(url + "/auth/status", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      });
-      
-      const data = await response.json();
-      if (response.ok) {
-        const updatedProfile = {...profile};
-        updatedProfile.age = data.age;
-        updatedProfile.gender = data.gender;
-        updatedProfile.hobbies = data.hobbies;
-        updatedProfile.interests = data.interests;
-        updatedProfile.name = data.name;
-        updatedProfile.occupation = data.occupation;
-        setProfile(updatedProfile);
-      } else {
-        console.log(data.message);
-        if (response.status === 401) {
-          logoutHandler();
-        }
-      }
-    } catch (err) {
-      console.log(`An error occurred ${err}`);
-    }
-  };
   useEffect(() => {
-    verifyToken()
-    setToken(token)
+    verifyToken((data)=>{
+      const updatedProfile = {...profile};
+      updatedProfile.age = data.age;
+      updatedProfile.gender = data.gender;
+      updatedProfile.hobbies = data.hobbies;
+      updatedProfile.interests = data.interests;
+      updatedProfile.name = data.name;
+      updatedProfile.occupation = data.occupation;
+      setProfile(updatedProfile);
+    }, navigate)
+    setToken(token);
   }, [token, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -72,7 +42,7 @@ const ProfileEditorPage = () => {
       const url = import.meta.env.VITE_BACKEND_URL;
       const token = localStorage.getItem("token");
       if (!token) {
-        logoutHandler()
+        LogoutHandler(navigate)
         return;
       }
       const {name, ...rest} = profile;
@@ -91,7 +61,7 @@ const ProfileEditorPage = () => {
       } else {
         console.log(data.message);
         if (response.status === 401) {
-          logoutHandler();
+          LogoutHandler(navigate);
         }
       }
     } catch (err) {

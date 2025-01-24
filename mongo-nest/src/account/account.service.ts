@@ -48,7 +48,17 @@ class AccountService{
           throw new NotFoundException('User not found');
         }
         if (!('time' in data)) (data as any).time = Math.floor(Date.now() / 1000);
-    
+		if (data.word_id<0){
+			data.word_id += 2705;
+			const word_idx = (-data.word_id)%(10**6);
+			const deck_idx = Math.floor((-data.word_id)/(10**6));
+			user.decks[deck_idx].cards[word_idx].confidence += data.point;
+			user.markModified(`decks.${deck_idx}.cards.${word_idx}.confidence`);
+			console.log('adding to ',user.decks[deck_idx].cards[word_idx], ' index: ',word_idx, ' deck: ',deck_idx);
+			await user.save();
+			return 
+		}
+
         console.log('adding to ',id, ' data: ',data);
         const new_point = {
           word_id: data.word_id,
@@ -67,6 +77,9 @@ class AccountService{
         const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
     
         const scores = user.learningData.reduce((acc, data) => {
+		  if (data.word_id<0){
+			  return acc;
+		  }
           const timeDifference = currentTime - data.time;
           const contribution = data.point / timeDifference;
     
@@ -113,6 +126,7 @@ class AccountService{
 		if (!user) {
 			throw new NotFoundException('User not found');
 		}
+		if (!('decks' in user)) return [];
 		return user.decks;
 	}
 	async getUserDeck(userId: string, deckId: string){

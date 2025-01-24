@@ -20,6 +20,11 @@ export class QueryController {
 	async queryQuestion(@Req() req: Request, @Body() QuestionQueryDto: QuestionQueryDto){
 		const id = (req.user as IJwdPayloadUserId).id
 		const result = await this.QueryService.queryQuestion(id, QuestionQueryDto);
+		const [isHaveFlashcard, flashcard] = await this.QueryService.queryQuestionDatabase(id);
+		const randomUniform = Math.random();
+		if (randomUniform < 0.8 && isHaveFlashcard){
+			return flashcard
+		}
 		return result
 	}
 }

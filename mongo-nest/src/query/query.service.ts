@@ -58,4 +58,25 @@ export class QueryService {
 		}
 		return "hi there";
 	}
+
+	async queryQuestionDatabase(id: string){
+		const decks = await this.AccountService.getUserDecks(id);
+		const words = decks.flatMap((deck: any, deck_index: number) => deck.cards?deck.cards.map((card, index)=>{
+			card.word_id = -(10**6 * deck_index + index) - 2705;
+			return card;
+		}):[]);
+		const k = Math.min(10, words.length);
+		if (k<4){
+			return [false, []];
+		}
+		const sortedWords = words.sort((word1, word2) => word1.confidence-word2.confidence).slice(0, k);
+		const randomQuestion = sortedWords.map((word: any) => {
+			const {answer, ...rest} = word;
+			const correctAnswer = answer;
+			const answers = [correctAnswer, 
+				...words.filter((w: any) => w.word_id!==word.word_id).slice(0, 3).map((w: any) => w.answer)].sort(() => Math.random() - Math.random());
+			return {...rest, answers, correct_id: answers.indexOf(correctAnswer)};
+		});
+		return [true, randomQuestion];
+	}
 }

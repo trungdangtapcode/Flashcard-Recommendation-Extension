@@ -1,15 +1,14 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface IDeckEditBoxProps {
-	name: string;
-	description: string;
+	deckName: string;
+	deckDescription: string;
+	setDeckName: (name: string) => void;
+	setDeckDescription: (description: string) => void;
 	onSave: (name: string, description: string) => void;
 }
-const DeckEditBox = ({name, description, onSave}: IDeckEditBoxProps) => {
-	const [deckName, setDeckName] = useState(name);
-	const [deckDescription, setDeckDescription] = useState(description);
-	console.log(deckName, deckDescription);
+const DeckEditBox = ({deckName, setDeckName, deckDescription, setDeckDescription, onSave}: IDeckEditBoxProps) => {
+	console.log('name and description: ', deckName, deckDescription);
 	const navigate = useNavigate()
 	return (
 		<div className="h-full w-full bg-slate-200">

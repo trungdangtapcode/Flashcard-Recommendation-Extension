@@ -19,6 +19,8 @@ const DeckEditorPage = () => {
 	const [selectedCardIndex, setSelectedCardIndex] = useState<number>(-1);
 	const [question, setQuestion] = useState<string>("");
 	const [answer, setAnswer] = useState<string>("");
+	const [deckName, setDeckName] = useState<string>("");
+	const [deckDescription, setDeckDescription] = useState<string>("");
 
 	const changeSelectedCardIndex = (index: number) => {
 		setSelectedCardIndex(index);
@@ -51,6 +53,8 @@ const DeckEditorPage = () => {
 			}
 			const curDeck = decks[deckIndex];
 			setDeck(curDeck)
+			setDeckName(curDeck.name)
+			setDeckDescription(curDeck.description)
 		}
 		verifyToken(callback, navigate);
 	}
@@ -130,8 +134,10 @@ const DeckEditorPage = () => {
 				</ul>
 				<div className="w-full h-1/5 bg-black">
 					<DeckEditBox
-						name={deck?deck.name:""}
-						description={deck?deck.description:""}
+						deckName={deckName}
+						setDeckName={setDeckName}
+						deckDescription={deckDescription}
+						setDeckDescription={setDeckDescription}
 						onSave={(deskName: string, deskDesciption: string)=>{
 							if (!deck) return;
 							const newDeck = {...deck};

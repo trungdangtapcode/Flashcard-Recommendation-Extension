@@ -56,13 +56,14 @@ const DeckHomePage = ()=>{
 		const newDecks = [...decks]
 		newDecks.splice(deckIdx, 1)
 		setDecks(newDecks)
-		saveChangeToBackend()
+		saveChangeToBackend(newDecks)
 	}
 	const navigate = useNavigate()
 	const deckEditHandler = (deckIdx: number) => {
 		navigate(`/deckedit/${deckIdx}`)
 	}
-	const saveChangeToBackend = async () => {
+	const saveChangeToBackend = async (newDecks: IDeck[]|undefined) => {
+		const curDecks = newDecks || decks
 		const url = import.meta.env.VITE_BACKEND_URL;
 		const token = localStorage.getItem("token");
 		if (!token) {
@@ -76,7 +77,7 @@ const DeckHomePage = ()=>{
 				'Content-Type': 'application/json',
 				'Authorization': `Bearer ${token}`
 			},
-			body: JSON.stringify(decks)
+			body: JSON.stringify(curDecks)
 		})
 		if (!response.ok) {
 			toast.error('Failed to update deck');

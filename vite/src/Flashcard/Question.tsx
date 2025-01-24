@@ -17,7 +17,7 @@ const Question = ({ question, answers, correctId, onNext, word_id }: IQuestionPr
 
     const url = import.meta.env.VITE_BACKEND_URL;
 		const token = localStorage.getItem("token");
-		fetch(url + "/auth/pointadd", {
+		fetch(url + "/account/pointadd", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +35,7 @@ const Question = ({ question, answers, correctId, onNext, word_id }: IQuestionPr
 
   return (
     <div className="w-full max-w-md bg-white p-6 shadow-md rounded-md text-black">
-      <h2 className="text-lg font-semibold mb-4">{question}</h2>
+      <h2 className="text-lg font-semibold mb-4">{question+(word_id<0?"":" [Recommended word]")}</h2>
       <ul className="space-y-2">
         {answers.map((answer, index) => (
           <li

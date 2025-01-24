@@ -13,7 +13,7 @@ interface IQuestionProps {
     question: string, 
     answers: string[], 
     correctId: number, 
-    onNext: () => void
+    onNext: () => void,
 }
 interface IQuestion {
     question: string;

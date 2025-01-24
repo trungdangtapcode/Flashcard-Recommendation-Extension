@@ -11,6 +11,7 @@ import FlashcardPage from './Flashcard/FlashcardPage'
 import ProfileEditorPage from './ProfileEditor/ProfileEditorPage'
 import DeckHomePage from './EditorPage/DeckHomePage'
 import DeckCreatePage from './EditorPage/DeckCreatePage.tsx'
+import DeckEditorPage from './EditorPage/DeckEditorPage.tsx'
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/profile" element={<ProfileEditorPage />} />
         <Route path="/deckhome" element={<DeckHomePage/>}/>
         <Route path="/deckcreate" element={<DeckCreatePage/>}/>
+        <Route path="/deckedit/:deckIndex" element={<DeckEditorPage/>}/>
         <Route path="/" element={<LoginPage/>} />
       </Routes>
     </Router>

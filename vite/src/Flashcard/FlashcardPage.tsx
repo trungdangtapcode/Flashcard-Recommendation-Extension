@@ -93,6 +93,9 @@ const logoutHandler = () => {
 const profileHandler = () => {
 	ProfileHandler(navigate);
 }
+const deckEditorHandler = () => {
+	navigate("/deckhome");
+}
 
 
 useEffect(() => {
@@ -118,7 +121,11 @@ return (
     	<div className="w-full max-w-md ">
 			<button onClick={profileHandler}
 				className="text-black px-2 rounded-none
-				hover:bg-blue-500 hover:text-white">EDIT</button>
+				hover:bg-blue-500 hover:text-white">PROFILE</button>
+			<button onClick={deckEditorHandler}
+				className="text-black px-2 rounded-none
+				hover:bg-teal-400 hover:text-white">DECKS
+				</button>
 			<button onClick={logoutHandler}
 				className="text-black px-2 rounded-none
 				hover:bg-red-600 hover:text-white">LOG OUT</button>

@@ -86,6 +86,13 @@ const DeckCreatePage = () => {
           >
             Create Deck
           </button>
+		  <button
+            type="button"
+            className="mt-2 w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200"
+			onClick={()=>{navigate("/deckhome")}}
+		  >
+            Back Home
+          </button>
         </form>
       </div>
     </div>

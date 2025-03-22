@@ -1,14 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "English Word Recommendation",
-  "description": "English Word Recommendation using BEiT",
+  "name": "Flashcard extension and recommendation",
+  "description": "Flashcard extension and recommendation for English word (demo)",
   "version": "1.0",
   "action": {
-    "default_icon": "Japan.png",
+    "default_icon": "img-icon.png",
     "default_popup": "index.html"
   },
   "icons": {
-    "16": "Japan.png"
+    "16": "img-icon.png"
   },
   "permissions": [
     "contextMenus", 
@@ -23,8 +23,7 @@
     "js": ["popup/popup.js"],
     "matches": [
       "https://developer.chrome.com/docs/extensions/*",
-      "https://developer.chrome.com/docs/webstore/*",
-      "file:///D:/git/workplace/japanese_learning_system/test/article.html"
+      "https://developer.chrome.com/docs/webstore/*"
     ]
   }
   ],

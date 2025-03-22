@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import DeckBox from "./components/deckBox";
+import DeckBox from "./components/DeckBox";
 import { toast, ToastContainer } from "react-toastify";
 import { confirmAlert } from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css'; 
@@ -18,7 +18,8 @@ const DeckHomePage = ()=>{
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${token}`
+				'Authorization': `Bearer ${token}`,
+				"ngrok-skip-browser-warning": "2705",
 			}
 		})
 		if (!response.ok) {
@@ -75,7 +76,8 @@ const DeckHomePage = ()=>{
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${token}`
+				'Authorization': `Bearer ${token}`,
+				"ngrok-skip-browser-warning": "2705",
 			},
 			body: JSON.stringify(curDecks)
 		})

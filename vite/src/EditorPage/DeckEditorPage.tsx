@@ -73,7 +73,8 @@ const DeckEditorPage = () => {
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${token}`
+				'Authorization': `Bearer ${token}`,
+				"ngrok-skip-browser-warning": "2705",
 			},
 			body: JSON.stringify(deck)
 		})

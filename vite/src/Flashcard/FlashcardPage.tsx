@@ -33,6 +33,7 @@ try {
 			  'Accept': 'application/json',
 			  'Content-Type': 'application/json',
 			  'Authorization': `Bearer ${token}`,
+			  "ngrok-skip-browser-warning": "2705",
 			},
 			body: bodyString
 		});

@@ -47,7 +47,7 @@ const RegisterPage = () => {
             <input
               type="text"
               id="name"
-              defaultValue="John Doe"
+              defaultValue=""
               placeholder="Enter your name"
               className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-700"
               required
@@ -63,7 +63,7 @@ const RegisterPage = () => {
             <input
               type="email"
               id="email"
-              defaultValue="tcuong1000@gmail.com"
+              defaultValue=""
               placeholder="Enter your email"
               className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-700"
               required
@@ -79,7 +79,7 @@ const RegisterPage = () => {
             <input
               type="password"
               id="password"
-              defaultValue="123456"
+              defaultValue=""
               placeholder="Create a password"
               className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-700"
               required

@@ -6,7 +6,7 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-const backend_url = "http://127.0.0.1:3010";
+const backend_url = "https://gazelle-wise-worm.ngrok-free.app";
 const LENGHT_LIMIT_HISTORY = 10
 const LENGHT_LIMIT_TRANSLATE = 30
 

@@ -83,7 +83,7 @@ return (
             <input
               type="email"
               id="email"
-              defaultValue="a@gmail.com"
+              defaultValue=""
               placeholder="Enter your email"
               className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-700"
               required
@@ -99,7 +99,7 @@ return (
             <input
               type="password"
               id="password"
-              defaultValue="a@gmail.com"
+              defaultValue=""
               placeholder="Enter your password"
               className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-700"
               required

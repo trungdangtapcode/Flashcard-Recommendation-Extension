@@ -51,6 +51,7 @@ const ProfileEditorPage = () => {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "ngrok-skip-browser-warning": "2705",
       },
       body: JSON.stringify({name: name, bio: {...rest}}),
       });

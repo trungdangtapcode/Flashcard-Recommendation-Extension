@@ -19,6 +19,7 @@ export const verifyToken = async (callback: (data: any) => void, navigate: (url:
 		headers: {
 			"Content-Type": "application/json",
 			Authorization: `Bearer ${token}`,
+			"ngrok-skip-browser-warning": "2705",
 		},
 		});
 		const data = await response.json();
